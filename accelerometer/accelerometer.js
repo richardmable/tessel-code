@@ -10,14 +10,19 @@ var tessel = require('tessel');
 // require the accelerometer module and use port A
 var accel = require('accel-mma84').use(tessel.port['A']);
 
-// intialize the accelerometer
+// initialize the accelerometer
 
 accel.on('ready', function(){
+
+steps = 0;
 // stream accelerometer data
-  accel.on('data', function(xyz) {
-    console.log('x:', xyz[0].toFixed(2),
-    'y:', xyz[1].toFixed(2),
-    'z', xyz[2].toFixed(2));
+  accel.setOutputRate(20, function rateSet(){
+    accel.on('data', function(xyz) {
+     if (xyz[0] > 0.5){
+     	steps += 1;
+     }
+     console.log(steps);
+    });
   });
 });
 
